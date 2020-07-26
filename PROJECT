@@ -1,0 +1,7 @@
+domain: convect.ai
+repo: mykubecon
+resources:
+- group: webapp
+  kind: GuestBook
+  version: v1
+version: "2"
