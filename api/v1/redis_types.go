@@ -17,69 +17,56 @@ limitations under the License.
 package v1
 
 import (
-	corev1 "k8s.io/api/core/v1"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// GuestBookSpec defines the desired state of GuestBook
-type GuestBookSpec struct {
+// RedisSpec defines the desired state of Redis
+type RedisSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	Frontend  FrontendSpec `json:"frontend"`
-	RedisName string       `json:"redisName,omitempty"`
+	FollowerReplicas *int32 `json:"followerReplicas,omitempty"`
 }
 
-// FrontendSpec is the specification of the web frontend
-type FrontendSpec struct {
-	// +optional
-	Resources corev1.ResourceRequirements `json:"resources"`
-
-	// +optional
-	// +kubebuilder:default=8080
-	// +kubebuilder:validation:Minimum=0
-	ServingPort int32 `json:"servingPort"`
-
-	// +optional
-	// +kubebuilder:default=1
-	// +kubebuilder:validation:Minimum=0
-	Replicas *int32 `json:"replicas,omitempty"`
-}
-
-// GuestBookStatus defines the observed state of GuestBook
-type GuestBookStatus struct {
+// RedisStatus defines the observed state of Redis
+type RedisStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	URL string `json:"url"`
+
+	// The name of the service created for the Redis leader
+	LeaderService string `json:"leaderService"`
+
+	// The name of the service created for the Redis follower
+	FollowerService string `json:"followerService"`
 }
 
 // +kubebuilder:object:root=true
-// +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:JSONPath=".status.url",name="URL",type="string"
-// +kubebuilder:printcolumn:JSONPath=".spec.frontend.replicas",name="Desired",type="integer"
+// +kubebuilder:subresources:status
+// +kubebuilder:printcolumn:JSONPath=".status.leaderService",name="Leader",type="string"
+// +kubebuilder:printcolumn:JSONPath=".status.followerService",name="Follower",type="string"
+// +kubebuilder:printcolumn:JSONPath=".spec.followerReplicas",name="Desired",type="integer"
 
-// GuestBook is the Schema for the guestbooks API
-type GuestBook struct {
+// Redis is the Schema for the redis API
+type Redis struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   GuestBookSpec   `json:"spec,omitempty"`
-	Status GuestBookStatus `json:"status,omitempty"`
+	Spec   RedisSpec   `json:"spec,omitempty"`
+	Status RedisStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// GuestBookList contains a list of GuestBook
-type GuestBookList struct {
+// RedisList contains a list of Redis
+type RedisList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []GuestBook `json:"items"`
+	Items           []Redis `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&GuestBook{}, &GuestBookList{})
+	SchemeBuilder.Register(&Redis{}, &RedisList{})
 }
