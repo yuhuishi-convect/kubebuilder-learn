@@ -52,12 +52,16 @@ func (r *GuestBookReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	log.Info("reconciling guestbook")
 
 	// get the guestbook object
+	log.Info("Get the  guestbook")
+
 	var book webappv1.GuestBook
 	if err := r.Get(ctx, req.NamespacedName, &book); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
 	// get the redis object
+	log.Info("Get the redis object")
+
 	var redis webappv1.Redis
 	redisName := client.ObjectKey{Name: book.Spec.RedisName, Namespace: req.Namespace}
 	if err := r.Get(ctx, redisName, &redis); err != nil {
@@ -65,11 +69,15 @@ func (r *GuestBookReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	// get the deployment of the redis
+	log.Info("Get the redis deployments")
+
 	deployment, err := r.desiredDeployment(book, redis)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
 	// get the svc resource of the redis
+	log.Info("Get the redis SVC")
+
 	svc, err := r.desiredService(book)
 	if err != nil {
 		return ctrl.Result{}, err
@@ -89,6 +97,8 @@ func (r *GuestBookReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	// set the status field
+	log.Info("Setting the url field")
+
 	book.Status.URL = urlForService(svc, book.Spec.Frontend.ServingPort)
 
 	err = r.Status().Update(ctx, &book)

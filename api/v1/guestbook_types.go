@@ -40,12 +40,10 @@ type FrontendSpec struct {
 	Resources corev1.ResourceRequirements `json:"resources"`
 
 	// +optional
-	// +kubebuilder:default=8080
 	// +kubebuilder:validation:Minimum=0
 	ServingPort int32 `json:"servingPort"`
 
 	// +optional
-	// +kubebuilder:default=1
 	// +kubebuilder:validation:Minimum=0
 	Replicas *int32 `json:"replicas,omitempty"`
 }

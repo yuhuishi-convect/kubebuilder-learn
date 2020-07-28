@@ -44,7 +44,7 @@ type RedisStatus struct {
 }
 
 // +kubebuilder:object:root=true
-// +kubebuilder:subresources:status
+// +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:JSONPath=".status.leaderService",name="Leader",type="string"
 // +kubebuilder:printcolumn:JSONPath=".status.followerService",name="Follower",type="string"
 // +kubebuilder:printcolumn:JSONPath=".spec.followerReplicas",name="Desired",type="integer"

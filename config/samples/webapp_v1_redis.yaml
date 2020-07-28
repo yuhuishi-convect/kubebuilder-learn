@@ -2,6 +2,6 @@ apiVersion: webapp.convect.ai/v1
 kind: Redis
 metadata:
   name: redis-sample
-spec:
-  # Add fields here
-  foo: bar
+spec: 
+  FollowerReplicas: 1
+

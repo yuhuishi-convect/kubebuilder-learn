@@ -46,13 +46,11 @@ func (r *RedisReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	log.Info("reconciling redis")
 
-	// get the object
 	var redis webappv1.Redis
 	if err := r.Get(ctx, req.NamespacedName, &redis); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	// leader deployment
 	leaderDepl, err := r.leaderDeployment(redis)
 	if err != nil {
 		return ctrl.Result{}, err
@@ -98,7 +96,6 @@ func (r *RedisReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	log.Info("reconciled redis")
-
 	return ctrl.Result{}, nil
 }
 
